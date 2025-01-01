@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=Session Mod Manager
+Comment=This is a Desktop application to easily mod Session and install custom maps and textures all in one tool.
+Categories=Utility;Compression;
+
+Icon=com.github.rodriada000.SessionMapSwitcher
+Exec=session-mod-manager.sh
+Terminal=false

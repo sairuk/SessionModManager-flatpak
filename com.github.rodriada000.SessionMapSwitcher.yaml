@@ -1,0 +1,70 @@
+id: com.github.rodriada000.SessionMapSwitcher
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.dotnet8
+build-options:
+  prepend-path: "/usr/lib/sdk/dotnet8/bin"
+  append-ld-library-path: "/usr/lib/sdk/dotnet8/lib"
+  prepend-pkg-config-path: "/usr/lib/sdk/dotnet8/lib/pkgconfig"
+
+#
+# App writes to its own directory, so run it out of the userspace, yes is a crappy solution
+#
+command: session-mod-manager.sh
+
+finish-args:
+  - --share=network
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  # Normal Steam
+  - --filesystem=~/.local/share/Steam/steamapps/common/Session
+  - --filesystem=~/.local/share/Steam/steamapps/compatdata/861650
+  # Flatpak Steam
+  - --filesystem=~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/Session
+  - --filesystem=~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/compatdata/861650
+  # Environment Vars
+  - --env=DOTNET_ROOT=/app/lib/dotnet
+
+modules:
+  - name: dotnet
+    buildsystem: simple
+    build-commands:
+    - /usr/lib/sdk/dotnet8/bin/install.sh
+
+  - name: sessionmapswitcher
+    buildsystem: simple
+    sources:
+      - type: archive
+        dest-filename: smm.zip
+        url: https://github.com/rodriada000/SessionMapSwitcher/releases/download/v3.0.5/Session_Mod_Manager_3_0_5_linux.zip
+        sha256: 4612e323bf8872cbc5bc3aef31f12acc2af6030e1c4d9ce727fead71026be413
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/smm
+      - chmod +x SessionModManager
+      - mv * ${FLATPAK_DEST}/smm
+
+  - name: launcher
+    buildsystem: simple
+    sources:
+      - type: file
+        path: session-mod-manager.sh 
+      - type: file
+        path: com.github.rodriada000.SessionMapSwitcher.desktop
+      - type: file
+        path: com.github.rodriada000.SessionMapSwitcher.metainfo.xml
+      - type: file
+        path: com.github.rodriada000.SessionMapSwitcher.48.png
+      - type: file
+        path: com.github.rodriada000.SessionMapSwitcher.64.png
+      - type: file
+        path: com.github.rodriada000.SessionMapSwitcher.128.png
+    build-commands:
+      - install -Dm 755 session-mod-manager.sh -t /app/bin
+      - install -Dm 644 com.github.rodriada000.SessionMapSwitcher.desktop -t /app/share/applications
+      - install -Dm 644 com.github.rodriada000.SessionMapSwitcher.metainfo.xml -t /app/share/metainfo
+      - install -Dm 644 com.github.rodriada000.SessionMapSwitcher.48.png /app/share/icons/hicolor/48x48/apps/com.github.rodriada000.SessionMapSwitcher.png
+      - install -Dm 644 com.github.rodriada000.SessionMapSwitcher.64.png /app/share/icons/hicolor/64x64/apps/com.github.rodriada000.SessionMapSwitcher.png
+      - install -Dm 644 com.github.rodriada000.SessionMapSwitcher.128.png /app/share/icons/hicolor/128x128/apps/com.github.rodriada000.SessionMapSwitcher.png

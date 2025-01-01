@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.github.rodriada000.SessionMapSwitcher</id>
+  
+  <name>Session Mod Manager</name>
+  <summary>Easily mod Session and install custom maps and textures all in one tool.</summary>
+  
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  
+  <description>
+    <p>
+      Easily mod Session and install custom maps and textures all in one tool. Easily switch between maps in-game without having to restart and download custom textures directly in the app.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">com.github.rodriada000.SessionMapSwitcher.desktop</launchable>
+  <releases>
+    <release version="3.0.5" date="2024-08-31">
+      <url>https://github.com/rodriada000/SessionMapSwitcher/releases/tag/v3.0.5</url>
+    </release>
+  </releases>
+</component>
